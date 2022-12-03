@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MultiFlavor-FirebaseAppDistribution</string>
+
+
+    <string name="default_web_client_id" translatable="false">60687603203-aev7b6rhilbs00b6378qn740fe6cu1jl.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">60687603203</string>
+    <string name="google_api_key" translatable="false">AIzaSyAtgIx7_-XARqNCQdgItPaLM5WjrDeHCOo</string>
+    <string name="google_app_id" translatable="false">1:60687603203:android:8ddb16b8b8af50fced6036</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAtgIx7_-XARqNCQdgItPaLM5WjrDeHCOo</string>
+    <string name="google_storage_bucket" translatable="false">multiflavor-appdistribution.appspot.com</string>
+    <string name="project_id" translatable="false">multiflavor-appdistribution</string>
+</resources>
