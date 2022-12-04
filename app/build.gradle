@@ -5,15 +5,37 @@ plugins {
     id 'com.google.firebase.appdistribution'
 }
 
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
+    signingConfigs {
+        release {
+        storeFile file('/Users/humza/AndroidStudioProjects/MultiFlavorFirebaseAppDistribution/keystore/release-keystore.jks')
+            storePassword 'firebase'
+            keyAlias 'firebase'
+            keyPassword 'firebase'
+        }
+
+        staging {
+            storeFile file('/Users/humza/AndroidStudioProjects/MultiFlavorFirebaseAppDistribution/keystore/release-keystore.jks')
+            storePassword 'firebase'
+            keyAlias 'firebase'
+            keyPassword 'firebase'
+        }
+
+
+    }
     compileSdk 32
 
     defaultConfig {
         applicationId "mhk.app.multiflavor_firebaseappdistribution"
         minSdk 21
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        versionCode 8
+        versionName getVersionNameValue()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -22,6 +44,16 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.debug
+            debuggable true
+            minifyEnabled false
+        }
+        staging {
+            initWith debug
+            signingConfig signingConfigs.staging
         }
     }
     compileOptions {
@@ -30,6 +62,24 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    flavorDimensions 'dimension'
+    productFlavors {
+        dev {
+            dimension 'dimension'
+//            applicationIdSuffix '.dev'
+            versionNameSuffix "-dev-${gitSha()}"
+        }
+        beta {
+            dimension 'dimension'
+            applicationIdSuffix '.beta'
+            versionNameSuffix "-beta-${gitSha()}"
+        }
+        prod {
+            dimension 'dimension'
+            applicationIdSuffix '.prod'
+            versionNameSuffix "-prod-${gitSha()}"
+        }
     }
 }
 
@@ -45,4 +95,25 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+
+
+//    testImplementation 'junit:junit:4.13.2'
+//
+//    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+//    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
+
+    androidTestImplementation 'tools.fastlane:screengrab:2.1.1'
+}
+
+
+static def gitSha() {
+    return 'git rev-parse --short HEAD'.execute().text.trim()
+}
+
+static def getVersionNameValue() {
+    def versionMajor = 1
+    def versionMinor = 0
+    def versionPatch = 0
+    return "${versionMajor}.${versionMinor}.${versionPatch}"
 }

@@ -30,9 +30,70 @@ platform :android do
     # You can also use other beta testing services here
   end
 
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
+  #desc "Deploy a new version to the Google Play"
+  #lane :deploy do
+   # gradle(task: "clean assembleRelease")
+    #upload_to_play_store
+  #end
+
+
+  desc "Distribute app using Firebase App Distribution"
+  lane :distribute do
+
+    branchExp = "^master$"
+
+    ensure_git_branch(
+      branch: branchExp
+    )
+
+    increment_version_code(
+      gradle_file_path: "./app/build.gradle"
+    )
+
+    gradle(task: "clean")
+
+    gradle(
+      task: "assemble",
+      flavor: "Dev",
+      build_type: "Debug"
+    )
+
+    firebase_app_distribution(
+      #app: ENV['FIREBASE_APP_ID'],
+      app: "1:60687603203:android:8ddb16b8b8af50fced6036",
+      release_notes_file: "./release-notes.txt",
+      testers_file: "./testers.txt",
+      firebase_cli_path: "/usr/local/bin/firebase",
+      apk_path: "./app/build/outputs/apk/dev/debug/app-dev-debug.apk"
+    )
+
+    # new_version = get_version_name(
+    #   gradle_file_path:"./app/build.gradle",
+    #   ext_constant_name:"versionName"
+    # )
+
+    # Optional
+    # sh("git checkout -b 'version-bump-#{new_version}'")
+    # sh "git commit -am 'Version bump to #{new_version}'"
+    # push_to_git_remote
   end
+
+  desc "Build debug, test APK for screenshots and grab screenshots"
+  lane :grab_screens do
+   gradle(
+     task: 'clean'
+   )
+   gradle(
+     task: 'assemble',
+     build_type: 'Debug'
+   )
+   gradle(
+     task: 'assemble',
+     build_type: 'AndroidTest'
+   )
+   screengrab
+  end
+
+
+
 end
