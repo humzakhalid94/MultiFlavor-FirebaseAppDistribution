@@ -34,7 +34,7 @@ android {
         applicationId "mhk.app.multiflavor_firebaseappdistribution"
         minSdk 21
         targetSdk 32
-        versionCode 10
+        versionCode 14
         versionName getVersionNameValue()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

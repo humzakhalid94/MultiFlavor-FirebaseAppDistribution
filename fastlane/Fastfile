@@ -14,6 +14,11 @@
 # update_fastlane
 
 default_platform(:android)
+fastlane_require 'dotenv'
+
+before_all do
+  Dotenv.overload '.env.secret'
+end
 
 platform :android do
   desc "Runs all the tests"
@@ -59,8 +64,8 @@ platform :android do
     )
 
     firebase_app_distribution(
-      #app: ENV['FIREBASE_APP_ID'],
-      app: "1:60687603203:android:8ddb16b8b8af50fced6036",
+      app: ENV['FIREBASE_APP_ID'],
+      #app: "1:60687603203:android:8ddb16b8b8af50fced6036",
       release_notes_file: "./release-notes.txt",
       testers_file: "./testers.txt",
       firebase_cli_path: "/usr/local/bin/firebase",
