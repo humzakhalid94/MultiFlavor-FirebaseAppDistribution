@@ -1,5 +1,2 @@
-App successfully released!
-
-Fixed issues
-
-# DM-203
+Automation Added
+Screenshot Feature Added
